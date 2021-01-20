@@ -6,11 +6,11 @@ name: 间隔2小时任务
 on:
   workflow_dispatch:
   schedule:
-  - cron: '20 0,2,4,6,8,10,12,14,16,18,20,22 * * *'
+    - cron: '20 0,2,4,6,8,10,12,14,16,18,20,22 * * *'
   watch:
     types: started
   repository_dispatch:
-    types: joy
+    types: job_2_hour
 jobs:
   build:
 

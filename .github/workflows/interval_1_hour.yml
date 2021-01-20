@@ -6,11 +6,11 @@ name: 间隔1小时任务
 on:
   workflow_dispatch:
   schedule:
-  - cron: '1 */1 * * *'
+    - cron: '1 */1 * * *'
   watch:
     types: started
   repository_dispatch:
-    types: bean_sgin
+    types: job_per_hour
 jobs:
   build:
 
