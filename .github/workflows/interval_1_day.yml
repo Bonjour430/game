@@ -1,0 +1,321 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: 一次性任务
+
+on:
+  workflow_dispatch:
+  schedule:
+  - cron: '1 16 * * *'
+  watch:
+    types: started
+  repository_dispatch:
+    types: bean_sgin
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
+    steps:
+    - name: Checkout
+      run: |
+        git clone ${{ secrets.GIT_CLONE_URL }} ~/scripts
+    - name: Use Node.js 10.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 10.x
+    - name: npm install
+      run: |
+        cd ~/scripts
+        npm install
+
+    - name: '运行 【东东超市兑换奖品】'
+      run: |
+        cd ~/scripts
+        node jd_blueCoin.js
+      env:
+        JD_COOKIE: ${{ secrets.JD_COOKIE }}
+        JD_DEBUG: ${{ secrets.JD_DEBUG }}
+        MARKET_COIN_TO_BEANS: ${{ secrets.MARKET_COIN_TO_BEANS }}
+        MARKET_REWARD_NOTIFY: ${{ secrets.MARKET_REWARD_NOTIFY }}
+        PUSH_KEY: ${{ secrets.PUSH_KEY }}
+        BARK_PUSH: ${{ secrets.BARK_PUSH }}
+        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+        TG_USER_ID: ${{ secrets.TG_USER_ID }}
+        BARK_SOUND: ${{ secrets.BARK_SOUND }}
+        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
+        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
+        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
+
+    - name: '运行 【京东汽车兑换】'
+      run: |
+        cd ~/scripts
+        node jd_car_exchange.js
+      env:
+        JD_COOKIE: ${{ secrets.JD_COOKIE }}
+        JD_DEBUG: ${{ secrets.JD_DEBUG }}
+        MARKET_COIN_TO_BEANS: ${{ secrets.MARKET_COIN_TO_BEANS }}
+        MARKET_REWARD_NOTIFY: ${{ secrets.MARKET_REWARD_NOTIFY }}
+        PUSH_KEY: ${{ secrets.PUSH_KEY }}
+        BARK_PUSH: ${{ secrets.BARK_PUSH }}
+        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+        TG_USER_ID: ${{ secrets.TG_USER_ID }}
+        BARK_SOUND: ${{ secrets.BARK_SOUND }}
+        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
+        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
+        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
+
+    - name: '运行 【京豆签到脚本】'
+      run: |
+        cd ~/scripts
+        node jd_bean_sign.js
+      env:
+        JD_COOKIE: ${{ secrets.JD_COOKIE }}
+        JD_DEBUG: ${{ secrets.JD_DEBUG }}
+        JD_BEAN_STOP: true #自定义延迟签到,单位毫秒. 默认分批并发无延迟. 延迟作用于每个签到接口, 如填入延迟则切换顺序签到(耗时较长)
+        PUSH_KEY: ${{ secrets.PUSH_KEY }}
+        BARK_PUSH: ${{ secrets.BARK_PUSH }}
+        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+        TG_USER_ID: ${{ secrets.TG_USER_ID }}
+        BARK_SOUND: ${{ secrets.BARK_SOUND }}
+        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
+        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
+        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
+
+    - name: '运行 【领京豆】'
+      run: |
+        cd ~/scripts
+        node jd_bean_home.js
+      env:
+        JD_COOKIE: ${{ secrets.JD_COOKIE }}
+        JD_DEBUG: ${{ secrets.JD_DEBUG }}
+        MARKET_COIN_TO_BEANS: ${{ secrets.MARKET_COIN_TO_BEANS }}
+        MARKET_REWARD_NOTIFY: ${{ secrets.MARKET_REWARD_NOTIFY }}
+        PUSH_KEY: ${{ secrets.PUSH_KEY }}
+        BARK_PUSH: ${{ secrets.BARK_PUSH }}
+        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+        TG_USER_ID: ${{ secrets.TG_USER_ID }}
+        BARK_SOUND: ${{ secrets.BARK_SOUND }}
+        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
+        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
+        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
+
+    - name: '运行 【京豆变动通知】'
+      run: |
+        cd ~/scripts
+        node jd_bean_change.js
+      env:
+        JD_COOKIE: ${{ secrets.JD_COOKIE }}
+        JD_DEBUG: ${{ secrets.JD_DEBUG }}
+        PUSH_KEY: ${{ secrets.PUSH_KEY }}
+        BARK_PUSH: ${{ secrets.BARK_PUSH }}
+        BARK_SOUND: ${{ secrets.BARK_SOUND }}
+        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+        TG_USER_ID: ${{ secrets.TG_USER_ID }}
+        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
+        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
+        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
+        JD_818_SHAREID_NOTIFY: ${{ secrets.JD_818_SHAREID_NOTIFY }}
+
+    - name: '运行 【京喜签到】'
+      run: |
+        cd ~/scripts
+        node jx_sign.js
+      env:
+        JD_COOKIE: ${{ secrets.JD_COOKIE }}
+        JD_DEBUG: ${{ secrets.JD_DEBUG }}
+        MARKET_COIN_TO_BEANS: ${{ secrets.MARKET_COIN_TO_BEANS }}
+        MARKET_REWARD_NOTIFY: ${{ secrets.MARKET_REWARD_NOTIFY }}
+        PUSH_KEY: ${{ secrets.PUSH_KEY }}
+        BARK_PUSH: ${{ secrets.BARK_PUSH }}
+        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+        TG_USER_ID: ${{ secrets.TG_USER_ID }}
+        BARK_SOUND: ${{ secrets.BARK_SOUND }}
+        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
+        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
+        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
+
+    - name: '运行 【签到领现金】'
+      run: |
+        cd ~/scripts
+        node jd_cash.js
+      env:
+        JD_COOKIE: ${{ secrets.JD_COOKIE }}
+        JD_DEBUG: ${{ secrets.JD_DEBUG }}
+        MARKET_COIN_TO_BEANS: ${{ secrets.MARKET_COIN_TO_BEANS }}
+        MARKET_REWARD_NOTIFY: ${{ secrets.MARKET_REWARD_NOTIFY }}
+        PUSH_KEY: ${{ secrets.PUSH_KEY }}
+        BARK_PUSH: ${{ secrets.BARK_PUSH }}
+        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+        TG_USER_ID: ${{ secrets.TG_USER_ID }}
+        BARK_SOUND: ${{ secrets.BARK_SOUND }}
+        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
+        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
+        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
+
+    - name: '运行 【京东快递签到】'
+      run: |
+        cd ~/scripts
+        node jd_kd.js
+      env:
+        JD_COOKIE: ${{ secrets.JD_COOKIE }}
+        JD_DEBUG: ${{ secrets.JD_DEBUG }}
+        MARKET_COIN_TO_BEANS: ${{ secrets.MARKET_COIN_TO_BEANS }}
+        MARKET_REWARD_NOTIFY: ${{ secrets.MARKET_REWARD_NOTIFY }}
+        PUSH_KEY: ${{ secrets.PUSH_KEY }}
+        BARK_PUSH: ${{ secrets.BARK_PUSH }}
+        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+        TG_USER_ID: ${{ secrets.TG_USER_ID }}
+        BARK_SOUND: ${{ secrets.BARK_SOUND }}
+        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
+        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
+        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
+
+    - name: '运行 【摇京豆脚本】'
+      run: |
+        cd ~/scripts
+        node jd_club_lottery.js
+      env:
+        JD_COOKIE: ${{ secrets.JD_COOKIE }}
+        JD_DEBUG: ${{ secrets.JD_DEBUG }}
+        PUSH_KEY: ${{ secrets.PUSH_KEY }}
+        BARK_PUSH: ${{ secrets.BARK_PUSH }}
+        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+        TG_USER_ID: ${{ secrets.TG_USER_ID }}
+        BARK_SOUND: ${{ secrets.BARK_SOUND }}
+        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
+        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
+        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
+
+    - name: '运行 【进店领豆脚本】'
+      run: |
+        cd ~/scripts
+        node jd_shop.js
+      env:
+        JD_COOKIE: ${{ secrets.JD_COOKIE }}
+        JD_DEBUG: ${{ secrets.JD_DEBUG }}
+        PUSH_KEY: ${{ secrets.PUSH_KEY }}
+        BARK_PUSH: ${{ secrets.BARK_PUSH }}
+        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+        TG_USER_ID: ${{ secrets.TG_USER_ID }}
+        BARK_SOUND: ${{ secrets.BARK_SOUND }}
+        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
+        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
+        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
+
+    - name: '运行 【京东家庭号】'
+      run: |
+        cd ~/scripts
+        node jd_family.js
+      env:
+        JD_COOKIE: ${{ secrets.JD_COOKIE }}
+        JD_DEBUG: ${{ secrets.JD_DEBUG }}
+        MARKET_COIN_TO_BEANS: ${{ secrets.MARKET_COIN_TO_BEANS }}
+        MARKET_REWARD_NOTIFY: ${{ secrets.MARKET_REWARD_NOTIFY }}
+        PUSH_KEY: ${{ secrets.PUSH_KEY }}
+        BARK_PUSH: ${{ secrets.BARK_PUSH }}
+        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+        TG_USER_ID: ${{ secrets.TG_USER_ID }}
+        BARK_SOUND: ${{ secrets.BARK_SOUND }}
+        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
+        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
+        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
+
+    - name: '运行 【京东赚赚】'
+      run: |
+        cd ~/scripts
+        node jd_jdzz.js
+      env:
+        JD_COOKIE: ${{ secrets.JD_COOKIE }}
+        JD_DEBUG: ${{ secrets.JD_DEBUG }}
+        PUSH_KEY: ${{ secrets.PUSH_KEY }}
+        BARK_PUSH: ${{ secrets.BARK_PUSH }}
+        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+        TG_USER_ID: ${{ secrets.TG_USER_ID }}
+        BARK_SOUND: ${{ secrets.BARK_SOUND }}
+        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
+        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
+        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
+
+    - name: '运行 【京东抽奖机】'
+      run: |
+        cd ~/scripts
+        node jd_lotteryMachine.js
+      env:
+        JD_COOKIE: ${{ secrets.JD_COOKIE }}
+        JD_DEBUG: ${{ secrets.JD_DEBUG }}
+        PUSH_KEY: ${{ secrets.PUSH_KEY }}
+        BARK_PUSH: ${{ secrets.BARK_PUSH }}
+        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+        TG_USER_ID: ${{ secrets.TG_USER_ID }}
+        BARK_SOUND: ${{ secrets.BARK_SOUND }}
+        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
+        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
+        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
+
+    - name: '运行 【京东年货节】'
+      run: |
+        cd ~/scripts
+        node jd_nh.js
+      env:
+        JD_COOKIE: ${{ secrets.JD_COOKIE }}
+        JD_DEBUG: ${{ secrets.JD_DEBUG }}
+        MARKET_COIN_TO_BEANS: ${{ secrets.MARKET_COIN_TO_BEANS }}
+        MARKET_REWARD_NOTIFY: ${{ secrets.MARKET_REWARD_NOTIFY }}
+        PUSH_KEY: ${{ secrets.PUSH_KEY }}
+        BARK_PUSH: ${{ secrets.BARK_PUSH }}
+        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+        TG_USER_ID: ${{ secrets.TG_USER_ID }}
+        BARK_SOUND: ${{ secrets.BARK_SOUND }}
+        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
+        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
+        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
+
+    - name: '运行 【泡泡大战】'
+      run: |
+        cd ~/scripts
+        node jd_paopao_kyle.js
+      env:
+        JD_COOKIE: ${{ secrets.JD_COOKIE }}
+        JD_DEBUG: ${{ secrets.JD_DEBUG }}
+        PUSH_KEY: ${{ secrets.PUSH_KEY }}
+        BARK_PUSH: ${{ secrets.BARK_PUSH }}
+        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+        TG_USER_ID: ${{ secrets.TG_USER_ID }}
+        BARK_SOUND: ${{ secrets.BARK_SOUND }}
+        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
+        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
+        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
+
+    - name: '运行 【京东排行榜】'
+      run: |
+        cd ~/scripts
+        node jd_rankingList.js
+      env:
+        JD_COOKIE: ${{ secrets.JD_COOKIE }}
+        JD_DEBUG: ${{ secrets.JD_DEBUG }}
+        PUSH_KEY: ${{ secrets.PUSH_KEY }}
+        BARK_PUSH: ${{ secrets.BARK_PUSH }}
+        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+        TG_USER_ID: ${{ secrets.TG_USER_ID }}
+        BARK_SOUND: ${{ secrets.BARK_SOUND }}
+        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
+        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
+        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
+
+    - name: '运行 【十元街】'
+      run: |
+        cd ~/scripts
+        node jd_syj.js
+      env:
+        JD_COOKIE: ${{ secrets.JD_COOKIE }}
+        JD_DEBUG: ${{ secrets.JD_DEBUG }}
+        PUSH_KEY: ${{ secrets.PUSH_KEY }}
+        BARK_PUSH: ${{ secrets.BARK_PUSH }}
+        PETSHARECODES: ${{ secrets.PETSHARECODES }}
+        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+        TG_USER_ID: ${{ secrets.TG_USER_ID }}
+        PET_NOTIFY_CONTROL: ${{ secrets.PET_NOTIFY_CONTROL }}
+        BARK_SOUND: ${{ secrets.BARK_SOUND }}
+        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
+        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
+        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
