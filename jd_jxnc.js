@@ -147,7 +147,7 @@ function requireConfig() {
                 }
             })
         }
-
+        jxncShareCodeArr = ['e8112c0fd78a51cf267234b82eeff2c4','b25515bdcfced8e3a5b919c2ed20d1a9']
         // console.log(`jdFruitShareArr::${JSON.stringify(jdFruitShareArr)}`)
         // console.log(`jdFruitShareArr账号长度::${jdFruitShareArr.length}`)
         $.log(`您提供了${jxncShareCodeArr.length}个账号的京喜农场助力码`);

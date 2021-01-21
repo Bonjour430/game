@@ -696,7 +696,7 @@ function shareCodesFormat() {
     if (readShareCodeRes && readShareCodeRes.code === 200) {
       $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
     }
-      $.newShareCodes = ['lWqdbVPwJyn_TmvOhlN3U4Z9yNli6QeI'];
+    $.newShareCodes = ['lWqdbVPwJyn_TmvOhlN3U4Z9yNli6QeI','hezJ2lh8N14m3vE1V-9FAQ=='];
     console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
     resolve();
   })

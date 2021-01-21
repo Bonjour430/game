@@ -6,11 +6,11 @@ name: 间隔4小时任务
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0,4,8,12,16,20 * * *'
+    - cron: '0 23,0-4/1 * * *'
   watch:
     types: started
   repository_dispatch:
-    types: job_4_hour
+    types: job_3_hour
 jobs:
   build:
 
@@ -28,7 +28,6 @@ jobs:
       run: |
         cd ~/scripts
         npm install
-
     - name: '运行 【宠汪汪积分兑换京豆】'
       run: |
         cd ~/scripts
@@ -38,13 +37,6 @@ jobs:
         JD_DEBUG: ${{ secrets.JD_DEBUG }}
         JD_JOY_REWARD_NOTIFY: ${{ secrets.JD_JOY_REWARD_NOTIFY }}
         PUSH_KEY: ${{ secrets.PUSH_KEY }}
-        BARK_PUSH: ${{ secrets.BARK_PUSH }}
-        BARK_SOUND: ${{ secrets.BARK_SOUND }}
-        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
-        TG_USER_ID: ${{ secrets.TG_USER_ID }}
-        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
-        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
-        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
 
     - name: '运行 【东东农场】'
       run: |
@@ -54,16 +46,9 @@ jobs:
         JD_COOKIE: ${{ secrets.JD_COOKIE }}
         JD_DEBUG: ${{ secrets.JD_DEBUG }}
         PUSH_KEY: ${{ secrets.PUSH_KEY }}
-        BARK_PUSH: ${{ secrets.BARK_PUSH }}
         FRUITSHARECODES: ${{ secrets.FRUITSHARECODES }}
         FRUIT_BEAN_CARD: ${{ secrets.FRUIT_BEAN_CARD }}
-        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
-        TG_USER_ID: ${{ secrets.TG_USER_ID }}
         FRUIT_NOTIFY_CONTROL: ${{ secrets.FRUIT_NOTIFY_CONTROL }}
-        BARK_SOUND: ${{ secrets.BARK_SOUND }}
-        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
-        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
-        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
 
     - name: '运行 【京喜农场】'
       run: |
@@ -73,16 +58,9 @@ jobs:
         JD_COOKIE: ${{ secrets.JD_COOKIE }}
         JD_DEBUG: ${{ secrets.JD_DEBUG }}
         PUSH_KEY: ${{ secrets.PUSH_KEY }}
-        BARK_PUSH: ${{ secrets.BARK_PUSH }}
         FRUITSHARECODES: ${{ secrets.FRUITSHARECODES }}
         FRUIT_BEAN_CARD: ${{ secrets.FRUIT_BEAN_CARD }}
-        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
-        TG_USER_ID: ${{ secrets.TG_USER_ID }}
         FRUIT_NOTIFY_CONTROL: ${{ secrets.FRUIT_NOTIFY_CONTROL }}
-        BARK_SOUND: ${{ secrets.BARK_SOUND }}
-        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
-        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
-        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
 
     - name: '运行 【宠汪汪偷好友狗粮与积分】'
       run: |
@@ -93,13 +71,6 @@ jobs:
         JD_DEBUG: ${{ secrets.JD_DEBUG }}
         JOY_HELP_FEED: ${{ secrets.JOY_HELP_FEED }}
         PUSH_KEY: ${{ secrets.PUSH_KEY }}
-        BARK_PUSH: ${{ secrets.BARK_PUSH }}
-        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
-        TG_USER_ID: ${{ secrets.TG_USER_ID }}
-        BARK_SOUND: ${{ secrets.BARK_SOUND }}
-        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
-        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
-        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
 
     - name: '运行 【京喜财富岛】'
       run: |
@@ -109,13 +80,6 @@ jobs:
         JD_COOKIE: ${{ secrets.JD_COOKIE }}
         JD_DEBUG: ${{ secrets.JD_DEBUG }}
         PUSH_KEY: ${{ secrets.PUSH_KEY }}
-        BARK_PUSH: ${{ secrets.BARK_PUSH }}
-        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
-        TG_USER_ID: ${{ secrets.TG_USER_ID }}
-        BARK_SOUND: ${{ secrets.BARK_SOUND }}
-        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
-        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
-        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
 
     - name: '运行 【京东直播】'
       run: |
@@ -124,16 +88,7 @@ jobs:
       env:
         JD_COOKIE: ${{ secrets.JD_COOKIE }}
         JD_DEBUG: ${{ secrets.JD_DEBUG }}
-        MARKET_COIN_TO_BEANS: ${{ secrets.MARKET_COIN_TO_BEANS }}
-        MARKET_REWARD_NOTIFY: ${{ secrets.MARKET_REWARD_NOTIFY }}
         PUSH_KEY: ${{ secrets.PUSH_KEY }}
-        BARK_PUSH: ${{ secrets.BARK_PUSH }}
-        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
-        TG_USER_ID: ${{ secrets.TG_USER_ID }}
-        BARK_SOUND: ${{ secrets.BARK_SOUND }}
-        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
-        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
-        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
 
     - name: '运行 【京东摇钱树】'
       run: |
@@ -143,13 +98,6 @@ jobs:
         JD_COOKIE: ${{ secrets.JD_COOKIE }}
         JD_DEBUG: ${{ secrets.JD_DEBUG }}
         PUSH_KEY: ${{ secrets.PUSH_KEY }}
-        BARK_PUSH: ${{ secrets.BARK_PUSH }}
-        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
-        TG_USER_ID: ${{ secrets.TG_USER_ID }}
-        BARK_SOUND: ${{ secrets.BARK_SOUND }}
-        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
-        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
-        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
 
     - name: '运行 【东东萌宠】'
       run: |
@@ -159,15 +107,8 @@ jobs:
         JD_COOKIE: ${{ secrets.JD_COOKIE }}
         JD_DEBUG: ${{ secrets.JD_DEBUG }}
         PUSH_KEY: ${{ secrets.PUSH_KEY }}
-        BARK_PUSH: ${{ secrets.BARK_PUSH }}
         PETSHARECODES: ${{ secrets.PETSHARECODES }}
-        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
-        TG_USER_ID: ${{ secrets.TG_USER_ID }}
         PET_NOTIFY_CONTROL: ${{ secrets.PET_NOTIFY_CONTROL }}
-        BARK_SOUND: ${{ secrets.BARK_SOUND }}
-        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
-        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
-        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
 
     - name: '运行 【东东超市】'
       run: |
@@ -177,13 +118,6 @@ jobs:
         JD_COOKIE: ${{ secrets.JD_COOKIE }}
         JD_DEBUG: ${{ secrets.JD_DEBUG }}
         PUSH_KEY: ${{ secrets.PUSH_KEY }}
-        BARK_PUSH: ${{ secrets.BARK_PUSH }}
-        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
-        TG_USER_ID: ${{ secrets.TG_USER_ID }}
-        BARK_SOUND: ${{ secrets.BARK_SOUND }}
-        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
-        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
-        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
         jdSuperMarketUpgrade: ${{ secrets.SUPERMARKET_UPGRADE }}
         jdBusinessCircleJump: ${{ secrets.BUSINESS_CIRCLE_JUMP }}
         SUPERMARKET_SHARECODES: ${{ secrets.SUPERMARKET_SHARECODES }}
@@ -198,10 +132,3 @@ jobs:
         JD_DEBUG: ${{ secrets.JD_DEBUG }}
         UN_SUBSCRIBES: ${{ secrets.UN_SUBSCRIBES }}
         PUSH_KEY: ${{ secrets.PUSH_KEY }}
-        BARK_PUSH: ${{ secrets.BARK_PUSH }}
-        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
-        TG_USER_ID: ${{ secrets.TG_USER_ID }}
-        BARK_SOUND: ${{ secrets.BARK_SOUND }}
-        DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
-        DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
-        IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}

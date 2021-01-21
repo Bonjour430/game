@@ -1283,7 +1283,7 @@ function shareCodesFormat() {
       // newShareCodes = newShareCodes.concat(readShareCodeRes.data || []);
       newShareCodes = [...new Set([...newShareCodes, ...(readShareCodeRes.data || [])])];
     }
-      newShareCodes = [];
+    newShareCodes = ['02421e340509422ca8195398916d5bdf','7212455d14ce4566826fd5f20980f36f'];
     console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify(newShareCodes)}`)
     resolve();
   })
