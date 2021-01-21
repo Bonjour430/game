@@ -88,8 +88,6 @@ jobs:
         env:
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
-          MARKET_COIN_TO_BEANS: ${{ secrets.MARKET_COIN_TO_BEANS }}
-          MARKET_REWARD_NOTIFY: ${{ secrets.MARKET_REWARD_NOTIFY }}
           PUSH_KEY: ${{ secrets.PUSH_KEY }}
           BARK_PUSH: ${{ secrets.BARK_PUSH }}
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
@@ -99,22 +97,14 @@ jobs:
           DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
           IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
 
-      - name: '运行 【京豆变动通知】'
-        run: |
-          cd ~/scripts
-          node jd_bean_change.js
-        env:
-          JD_COOKIE: ${{ secrets.JD_COOKIE }}
-          JD_DEBUG: ${{ secrets.JD_DEBUG }}
-          PUSH_KEY: ${{ secrets.PUSH_KEY }}
-          BARK_PUSH: ${{ secrets.BARK_PUSH }}
-          BARK_SOUND: ${{ secrets.BARK_SOUND }}
-          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
-          TG_USER_ID: ${{ secrets.TG_USER_ID }}
-          DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
-          DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
-          IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
-          JD_818_SHAREID_NOTIFY: ${{ secrets.JD_818_SHAREID_NOTIFY }}
+#      - name: '运行 【京豆变动通知】'
+#        run: |
+#          cd ~/scripts
+#          node jd_bean_change.js
+#        env:
+#          JD_COOKIE: ${{ secrets.JD_COOKIE }}
+#          JD_DEBUG: ${{ secrets.JD_DEBUG }}
+#          PUSH_KEY: ${{ secrets.PUSH_KEY }}
 
       - name: '运行 【京喜签到】'
         run: |
@@ -123,8 +113,6 @@ jobs:
         env:
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
-          MARKET_COIN_TO_BEANS: ${{ secrets.MARKET_COIN_TO_BEANS }}
-          MARKET_REWARD_NOTIFY: ${{ secrets.MARKET_REWARD_NOTIFY }}
           PUSH_KEY: ${{ secrets.PUSH_KEY }}
           BARK_PUSH: ${{ secrets.BARK_PUSH }}
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
@@ -141,8 +129,6 @@ jobs:
         env:
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
-          MARKET_COIN_TO_BEANS: ${{ secrets.MARKET_COIN_TO_BEANS }}
-          MARKET_REWARD_NOTIFY: ${{ secrets.MARKET_REWARD_NOTIFY }}
           PUSH_KEY: ${{ secrets.PUSH_KEY }}
           BARK_PUSH: ${{ secrets.BARK_PUSH }}
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
@@ -159,8 +145,6 @@ jobs:
         env:
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
-          MARKET_COIN_TO_BEANS: ${{ secrets.MARKET_COIN_TO_BEANS }}
-          MARKET_REWARD_NOTIFY: ${{ secrets.MARKET_REWARD_NOTIFY }}
           PUSH_KEY: ${{ secrets.PUSH_KEY }}
           BARK_PUSH: ${{ secrets.BARK_PUSH }}
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
@@ -209,8 +193,6 @@ jobs:
         env:
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
-          MARKET_COIN_TO_BEANS: ${{ secrets.MARKET_COIN_TO_BEANS }}
-          MARKET_REWARD_NOTIFY: ${{ secrets.MARKET_REWARD_NOTIFY }}
           PUSH_KEY: ${{ secrets.PUSH_KEY }}
           BARK_PUSH: ${{ secrets.BARK_PUSH }}
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
@@ -259,8 +241,6 @@ jobs:
         env:
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
-          MARKET_COIN_TO_BEANS: ${{ secrets.MARKET_COIN_TO_BEANS }}
-          MARKET_REWARD_NOTIFY: ${{ secrets.MARKET_REWARD_NOTIFY }}
           PUSH_KEY: ${{ secrets.PUSH_KEY }}
           BARK_PUSH: ${{ secrets.BARK_PUSH }}
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
@@ -310,12 +290,48 @@ jobs:
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
           PUSH_KEY: ${{ secrets.PUSH_KEY }}
-          BARK_PUSH: ${{ secrets.BARK_PUSH }}
-          PETSHARECODES: ${{ secrets.PETSHARECODES }}
-          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
-          TG_USER_ID: ${{ secrets.TG_USER_ID }}
-          PET_NOTIFY_CONTROL: ${{ secrets.PET_NOTIFY_CONTROL }}
-          BARK_SOUND: ${{ secrets.BARK_SOUND }}
-          DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
-          DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
-          IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
+
+      - name: '运行 【口袋书店】'
+        run: |
+            cd ~/scripts
+            node jd_bookshop.js
+        env:
+            JD_COOKIE: ${{ secrets.JD_COOKIE }}
+            JD_DEBUG: ${{ secrets.JD_DEBUG }}
+            PUSH_KEY: ${{ secrets.PUSH_KEY }}
+
+      - name: '运行 【京东汽车】'
+        run: |
+          cd ~/scripts
+          node jd_car.js
+        env:
+          JD_COOKIE: ${{ secrets.JD_COOKIE }}
+          JD_DEBUG: ${{ secrets.JD_DEBUG }}
+          PUSH_KEY: ${{ secrets.PUSH_KEY }}
+
+      - name: '运行 【疯狂的JOY】'
+        run: |
+          cd ~/scripts
+          node jd_crazy_joy.js
+        env:
+          JD_COOKIE: ${{ secrets.JD_COOKIE }}
+          JD_DEBUG: ${{ secrets.JD_DEBUG }}
+          PUSH_KEY: ${{ secrets.PUSH_KEY }}
+
+      - name: '运行 【集鞭炮赢京豆】'
+        run: |
+          cd ~/scripts
+          node jd_firecrackers.js
+        env:
+          JD_COOKIE: ${{ secrets.JD_COOKIE }}
+          JD_DEBUG: ${{ secrets.JD_DEBUG }}
+          PUSH_KEY: ${{ secrets.PUSH_KEY }}
+
+      - name: '运行 【京东神仙书院】'
+        run: |
+          cd ~/scripts
+          node jd_immortal.js
+        env:
+          JD_COOKIE: ${{ secrets.JD_COOKIE }}
+          JD_DEBUG: ${{ secrets.JD_DEBUG }}
+          PUSH_KEY: ${{ secrets.PUSH_KEY }}

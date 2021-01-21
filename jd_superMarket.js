@@ -69,7 +69,7 @@ let shareCodes = [ // IOS本地脚本用户这个列表填入你要助力的好�
       }
       message = '';
       subTitle = '';
-      //await shareCodesFormat();//格式化助力码
+      await shareCodesFormat();//格式化助力码
       await jdSuperMarket();
       await showMsg();
       // await businessCircleActivity();
@@ -1506,7 +1506,7 @@ function shareCodesFormat() {
       const tempIndex = $.index > shareCodes.length ? (shareCodes.length - 1) : ($.index - 1);
       newShareCodes = shareCodes[tempIndex].split('@');
     }
-      newShareCodes = []
+    newShareCodes = []
     console.log(`格式化后第${$.index}个京东账号的助力码${JSON.stringify(newShareCodes)}`)
     resolve();
   })
