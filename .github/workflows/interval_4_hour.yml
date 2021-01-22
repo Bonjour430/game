@@ -99,17 +99,6 @@ jobs:
         JD_DEBUG: ${{ secrets.JD_DEBUG }}
         PUSH_KEY: ${{ secrets.PUSH_KEY }}
 
-    - name: '运行 【东东萌宠】'
-      run: |
-        cd ~/scripts
-        node jd_pet.js
-      env:
-        JD_COOKIE: ${{ secrets.JD_COOKIE }}
-        JD_DEBUG: ${{ secrets.JD_DEBUG }}
-        PUSH_KEY: ${{ secrets.PUSH_KEY }}
-        PETSHARECODES: ${{ secrets.PETSHARECODES }}
-        PET_NOTIFY_CONTROL: ${{ secrets.PET_NOTIFY_CONTROL }}
-
     - name: '运行 【东东超市】'
       run: |
         cd ~/scripts
