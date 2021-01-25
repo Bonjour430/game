@@ -115,14 +115,18 @@ async function jdWish() {
   $.nowBean = parseInt($.totalBeanNum)
   $.nowNum = parseInt($.totalNum)
   for (let i = 0; i < $.taskList.length; ++i) {
-    let task = $.taskList[i]
-    if (task['taskId'] === 1 && task['status'] !== 2) {
-      console.log(`去做任务：${task.taskName}`)
-      await doTask({"taskId": task['taskId']})
-    } else if (task['taskId'] !== 3 && task['status'] !== 2) {
-      console.log(`去做任务：${task.taskName}`)
-      await doTask({"taskId": task['taskId']})
-    }
+      let task = $.taskList[i]
+      if (task['taskId'] === 1 && task['status'] !== 2) {
+          console.log(`去做任务：${task.taskName}`)
+          await doTask({"taskId": task['taskId'],"mpVersion":"3.4.0"})
+      } else if (task['taskId'] !== 3 && task['status'] !== 2) {
+          console.log(`去做任务：${task.taskName}`)
+          if(task['itemId'])
+              await doTask({"itemId":task['itemId'],"taskId":task['taskId'],"mpVersion":"3.4.0"})
+          else
+              await doTask({"taskId": task['taskId'],"mpVersion":"3.4.0"})
+          await $.wait(3000)
+      }
   }
   await getTaskList();
   await showMsg();
@@ -330,7 +334,7 @@ function doTask(body, func = "doInteractTask") {
 async function helpFriends() {
   for (let code of $.newShareCodes) {
     if (!code) continue
-    await doTask({"itemId": code, "taskId": "3", "mpVersion": "3.1.0"}, "doHelpTask")
+      await doTask({"itemId": code, "taskId": "3", "mpVersion": "3.4.0"}, "doHelpTask")
   }
 }
 function readShareCode() {
