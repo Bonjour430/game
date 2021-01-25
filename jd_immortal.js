@@ -308,7 +308,7 @@ function shareCodesFormat() {
     if (readShareCodeRes && readShareCodeRes.code === 200) {
       $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
     }
-    $.newShareCodes = ['50xIs4YwE5Z7Dm46O9Uo9nZX-aN-Oh6jNyOXJP8Hu1uB7K7gzeMqQeJxHmBYG0X-H1RrbfLebKi9yCM8'];
+    $.newShareCodes = ['50xIs4YwE5Z7Dm46O9Uo9nZX-aN-Oh6jNyOXJP8Hu1uB7K7gzeMqQeJxHmBYG0X-H1RrbfLebKi9yCM8','39xIs4YwE5Z7CPQQ0TU5OLXWyB91108-tp_BLLoqtgbJBEvDIl2XRdNJwFSmA'];
     console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
     resolve();
   })
