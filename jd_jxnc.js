@@ -158,8 +158,7 @@ function requireConfig() {
                 }
             })
         }
-        jxncShareCodeArr = [{"smp":"e8112c0fd78a51cf267234b82eeff2c4","active":"jdnc_1_gxwogan210115_2","joinnum":1}@
-            {"smp":"b25515bdcfced8e3a5b919c2ed20d1a9","active":"jdnc_1_gxwogan210115_2","joinnum":1}]
+        jxncShareCodeArr = ['{"smp":"e8112c0fd78a51cf267234b82eeff2c4","active":"jdnc_1_gxwogan210115_2","joinnum":1}','{"smp":"b25515bdcfced8e3a5b919c2ed20d1a9","active":"jdnc_1_gxwogan210115_2","joinnum":1}']
 
         // 检查互助码是否为 json [smp,active,joinnum] 格式，否则进行通知
         for (let i = 0; i < jxncShareCodeArr.length; i++) {
