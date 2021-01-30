@@ -318,14 +318,14 @@ jobs:
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
           PUSH_KEY: ${{ secrets.PUSH_KEY }}
 
-      - name: '运行 【集鞭炮赢京豆】'
-        run: |
-          cd ~/scripts
-          node jd_firecrackers.js
-        env:
-          JD_COOKIE: ${{ secrets.JD_COOKIE }}
-          JD_DEBUG: ${{ secrets.JD_DEBUG }}
-          PUSH_KEY: ${{ secrets.PUSH_KEY }}
+#      - name: '运行 【集鞭炮赢京豆】'
+#        run: |
+#          cd ~/scripts
+#          node jd_firecrackers.js
+#        env:
+#          JD_COOKIE: ${{ secrets.JD_COOKIE }}
+#          JD_DEBUG: ${{ secrets.JD_DEBUG }}
+#          PUSH_KEY: ${{ secrets.PUSH_KEY }}
 
       - name: '运行 【京东神仙书院】'
         run: |
