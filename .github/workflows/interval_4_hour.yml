@@ -6,7 +6,7 @@ name: 间隔4小时任务
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 23,0-4/1 * * *'
+    - cron: '1 0,4,10,16,22 * * *'
   watch:
     types: started
   repository_dispatch:
@@ -111,6 +111,16 @@ jobs:
         jdBusinessCircleJump: ${{ secrets.BUSINESS_CIRCLE_JUMP }}
         SUPERMARKET_SHARECODES: ${{ secrets.SUPERMARKET_SHARECODES }}
         jdSuperMarketLottery: ${{ secrets.SUPERMARKET_LOTTERY }}
+
+    - name: '运行 【5G狂欢城】'
+      run: |
+        cd ~/scripts
+        node jd_5g.js
+      env:
+        JD_COOKIE: ${{ secrets.JD_COOKIE }}
+        JD_DEBUG: ${{ secrets.JD_DEBUG }}
+        UN_SUBSCRIBES: ${{ secrets.UN_SUBSCRIBES }}
+        PUSH_KEY: ${{ secrets.PUSH_KEY }}
 
     - name: '运行 【京东取关商品】'
       run: |

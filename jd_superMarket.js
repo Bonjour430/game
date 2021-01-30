@@ -2,25 +2,26 @@
  * @Author: LXK9301 https://github.com/LXK9301
  * @Date: 2020-08-16 18:54:16
  * @Last Modified by: LXK9301
- * @Last Modified time: 2021-1-9 21:22:37
+ * @Last Modified time: 2021-1-29 21:22:37
  */
 /*
-东东超市(活动入口：京东APP-》首页-》京东超市-》底部东东超市)
+东东超市
+活动入口：京东APP首页-京东超市-底部东东超市
 Some Functions Modified From https://github.com/Zero-S1/JD_tools/blob/master/JD_superMarket.py
 支持京东双账号
-东东超市兑换奖品请使用此脚本 https://raw.githubusercontent.com/LXK9301/jd_scripts/master/jd_blueCoin.js
+东东超市兑换奖品请使用此脚本 https://gitee.com/lxk0301/jd_scripts/raw/master/jd_blueCoin.js
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
 =================QuantumultX==============
 [task_local]
 #东东超市
-11 1-23/5 * * * https://raw.githubusercontent.com/LXK9301/jd_scripts/master/jd_superMarket.js, tag=东东超市, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jxc.png, enabled=true
+11 * * * * https://gitee.com/lxk0301/jd_scripts/raw/master/jd_superMarket.js, tag=东东超市, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jxc.png, enabled=true
 ===========Loon===============
 [Script]
-cron "11 1-23/5 * * *" script-path=https://raw.githubusercontent.com/LXK9301/jd_scripts/master/jd_superMarket.js,tag=东东超市
+cron "11 * * * *" script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_superMarket.js,tag=东东超市
 =======Surge===========
-东东超市 = type=cron,cronexp="11 1-23/5 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/LXK9301/jd_scripts/master/jd_superMarket.js
+东东超市 = type=cron,cronexp="11 * * * *",wake-system=1,timeout=3600,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_superMarket.js
 ==============小火箭=============
-东东超市 = type=cron,script-path=https://raw.githubusercontent.com/LXK9301/jd_scripts/master/jd_superMarket.js, cronexpr="11 1-23/5 * * *", timeout=3600, enable=true
+东东超市 = type=cron,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_superMarket.js, cronexpr="11 * * * *", timeout=3600, enable=true
  */
 const $ = new Env('东东超市');
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -72,7 +73,7 @@ let shareCodes = [ // IOS本地脚本用户这个列表填入你要助力的好�
       }
       message = '';
       subTitle = '';
-      await shareCodesFormat();//格式化助力码
+      //await shareCodesFormat();//格式化助力码
       await jdSuperMarket();
       await showMsg();
       // await businessCircleActivity();
@@ -114,7 +115,7 @@ function showMsg() {
 }
 //抽奖功能(招财进宝)
 async function drawLottery() {
-  console.log(`\n注意⚠:京小超抽奖已改版,花费500蓝币抽奖一次,现在脚本默认已关闭抽奖功能\n`);
+  console.log(`\n注意⚠:东东超市抽奖已改版,花费500蓝币抽奖一次,现在脚本默认已关闭抽奖功能\n`);
   drawLotteryFlag = $.getdata('jdSuperMarketLottery') ? $.getdata('jdSuperMarketLottery') : drawLotteryFlag;
   if ($.isNode() && process.env.SUPERMARKET_LOTTERY) {
     drawLotteryFlag = process.env.SUPERMARKET_LOTTERY;
@@ -193,16 +194,16 @@ async function doDailyTask() {
         }
       }
       if (item.type === 10) {
-        //关注店铺
+        //关注商品领蓝币
         if (item.taskStatus === 0) {
-          console.log('开始关注店铺')
+          console.log('关注商品')
           const itemId = item.content[item.type].itemId;
           const res = await smtgDoShopTask(item.taskId, itemId);
           console.log(`${item.subTitle}结果${JSON.stringify(res)}`);
         }
       }
       if ((item.type === 8 || item.type === 2 || item.type === 10) && item.taskStatus === 0) {
-        await doDailyTask();
+        // await doDailyTask();
       }
     }
   }
@@ -233,7 +234,7 @@ function receiveBlueCoin(timeout = 0) {
       $.get(taskUrl('smtg_receiveCoin', {"type": 2, "channel": "18"}), async (err, resp, data) => {
         try {
           if (err) {
-            console.log('\n京小超: API查询请求失败 ‼️‼️')
+            console.log('\n东东超市: API查询请求失败 ‼️‼️')
             console.log(JSON.stringify(err));
           } else {
             data = JSON.parse(data);
@@ -291,7 +292,7 @@ function smtgSign(body) {
     $.get(taskUrl('smtg_sign', body), async (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -308,42 +309,42 @@ function smtgSign(body) {
 // 商圈活动
 async function businessCircleActivity() {
   // console.log(`\n商圈PK奖励,次日商圈大战开始的时候自动领领取\n`)
-    joinPkTeam = $.isNode() ? (process.env.JOIN_PK_TEAM ? process.env.JOIN_PK_TEAM : `${joinPkTeam}`) : ($.getdata('JOIN_PK_TEAM') ? $.getdata('JOIN_PK_TEAM') : `${joinPkTeam}`);
+  joinPkTeam = $.isNode() ? (process.env.JOIN_PK_TEAM ? process.env.JOIN_PK_TEAM : `${joinPkTeam}`) : ($.getdata('JOIN_PK_TEAM') ? $.getdata('JOIN_PK_TEAM') : `${joinPkTeam}`);
   const smtg_getTeamPkDetailInfoRes = await smtg_getTeamPkDetailInfo();
   if (smtg_getTeamPkDetailInfoRes && smtg_getTeamPkDetailInfoRes.data.bizCode === 0) {
     const { joinStatus, pkStatus, inviteCount, inviteCode, currentUserPkInfo, pkUserPkInfo, prizeInfo, pkActivityId, teamId } = smtg_getTeamPkDetailInfoRes.data.result;
     console.log(`\njoinStatus:${joinStatus}`);
     console.log(`pkStatus:${pkStatus}\n`);
-      console.log(`pkActivityId:${pkActivityId}\n`);
+    console.log(`pkActivityId:${pkActivityId}\n`);
 
-      if (joinStatus === 0) {
-          if (joinPkTeam === 'true') {
-              await getTeam();
-              console.log(`\n注：PK会在每天的七点自动随机加入LXK9301创建的队伍\n`)
-              await updatePkActivityId();
-              if (!$.updatePkActivityIdRes) await updatePkActivityIdCDN('https://gitee.com/lxk0301/updateTeam/raw/master/jd_updateTeam.json');
-              if (!$.updatePkActivityIdRes) await updatePkActivityIdCDN('https://cdn.jsdelivr.net/gh/LXK9301/updateTeam@master/jd_updateTeam.json');
-              console.log(`\nupdatePkActivityId[pkActivityId]:::${$.updatePkActivityIdRes.pkActivityId}`);
-              console.log(`\n京东服务器返回的[pkActivityId] ${pkActivityId}`);
-              if ($.updatePkActivityIdRes && ($.updatePkActivityIdRes.pkActivityId === pkActivityId)) {
-                  let Teams = []
-                  Teams = $.updatePkActivityIdRes['Teams'] || Teams;
-                  Teams = [...Teams, ...$.getTeams.filter(item => item['pkActivityId'] === `${pkActivityId}`)];
-                  const randomNum = randomNumber(0, Teams.length);
+    if (joinStatus === 0) {
+      if (joinPkTeam === 'true') {
+        await getTeam();
+        console.log(`\n注：PK会在每天的七点自动随机加入LXK9301创建的队伍\n`)
+        await updatePkActivityId();
+        if (!$.updatePkActivityIdRes) await updatePkActivityIdCDN('https://gitee.com/lxk0301/updateTeam/raw/master/jd_updateTeam.json');
+        if (!$.updatePkActivityIdRes) await updatePkActivityIdCDN('https://cdn.jsdelivr.net/gh/LXK9301/updateTeam@master/jd_updateTeam.json');
+        console.log(`\nupdatePkActivityId[pkActivityId]:::${$.updatePkActivityIdRes.pkActivityId}`);
+        console.log(`\n京东服务器返回的[pkActivityId] ${pkActivityId}`);
+        if ($.updatePkActivityIdRes && ($.updatePkActivityIdRes.pkActivityId === pkActivityId)) {
+          let Teams = []
+          Teams = $.updatePkActivityIdRes['Teams'] || Teams;
+          Teams = [...Teams, ...$.getTeams.filter(item => item['pkActivityId'] === `${pkActivityId}`)];
+          const randomNum = randomNumber(0, Teams.length);
 
-                  const res = await smtg_joinPkTeam(Teams[randomNum] && Teams[randomNum].teamId, Teams[randomNum] && Teams[randomNum].inviteCode, pkActivityId);
-                  if (res && res.data.bizCode === 0) {
-                      console.log(`加入战队成功`)
-                  } else if (res && res.data.bizCode === 229) {
-                      console.log(`加入战队失败,该战队已满\n无法加入`)
-                  } else {
-                      console.log(`加入战队其他未知情况:${JSON.stringify(res)}`)
-                  }
-              } else {
-                  console.log('\nupdatePkActivityId请求返回的pkActivityId与京东服务器返回不一致,暂时不加入战队')
-              }
+          const res = await smtg_joinPkTeam(Teams[randomNum] && Teams[randomNum].teamId, Teams[randomNum] && Teams[randomNum].inviteCode, pkActivityId);
+          if (res && res.data.bizCode === 0) {
+            console.log(`加入战队成功`)
+          } else if (res && res.data.bizCode === 229) {
+            console.log(`加入战队失败,该战队已满\n无法加入`)
+          } else {
+            console.log(`加入战队其他未知情况:${JSON.stringify(res)}`)
           }
-      } else if (joinStatus === 1) {
+        } else {
+          console.log('\nupdatePkActivityId请求返回的pkActivityId与京东服务器返回不一致,暂时不加入战队')
+        }
+      }
+    } else if (joinStatus === 1) {
       if (teamId) {
         console.log(`inviteCode: [${inviteCode}]`);
         console.log(`PK队伍teamId: [${teamId}]`);
@@ -741,7 +742,7 @@ function smtg_shopIndex() {
     $.get(taskUrl('smtg_shopIndex', { "channel": 1 }), async (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -792,7 +793,7 @@ function smtg_shelfUnlock(body) {
     $.get(taskUrl('smtg_shelfUnlock', body), (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           $.log(`解锁店铺结果:${data}\n`)
@@ -811,7 +812,7 @@ function smtg_shelfUpgrade(body) {
     $.get(taskUrl('smtg_shelfUpgrade', body), (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           $.log(`店铺升级结果:${data}\n`)
@@ -831,7 +832,7 @@ function smtg_sellMerchandise(body) {
     $.get(taskUrl('smtg_sellMerchandise', body), (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           $.log(`限时商品售卖结果:${data}\n`)
@@ -899,7 +900,7 @@ function smtgDoShopTask(taskId, itemId) {
     $.get(taskUrl('smtg_doShopTask', body), (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -920,7 +921,7 @@ function smtgObtainShopTaskPrize(taskId) {
     $.get(taskUrl('smtg_obtainShopTaskPrize', body), (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -938,7 +939,7 @@ function smtgQueryShopTask() {
     $.get(taskUrl('smtg_queryShopTask'), (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -957,7 +958,7 @@ function smtgSignList() {
       try {
         // console.log('ddd----ddd', data)
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -975,7 +976,7 @@ function smtgHome() {
     $.get(taskUrl('smtg_newHome', { "channel": "18" }), (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -1000,7 +1001,7 @@ function smtgQueryPkTask() {
     $.get(taskUrl('smtg_queryPkTask'), async (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -1044,7 +1045,7 @@ function smtgDoAssistPkTask(code) {
     $.get(taskUrl('smtg_doAssistPkTask', {"inviteCode": code}), (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -1062,7 +1063,7 @@ function smtgReceiveCoin(body) {
     $.get(taskUrl('smtg_receiveCoin', body), (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -1081,7 +1082,7 @@ function smtgObtainPkTaskPrize(taskId) {
     $.get(taskUrl('smtg_obtainPkTaskPrize', {"taskId": taskId}), (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -1099,7 +1100,7 @@ function smtgDoPkTask(taskId, itemId) {
     $.get(taskUrl('smtg_doPkTask', {"taskId": taskId, "itemId": itemId}), (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -1117,7 +1118,7 @@ function smtg_joinPkTeam(teamId, inviteCode, sharePkActivityId) {
     $.get(taskUrl('smtg_joinPkTeam', { teamId, inviteCode, "channel": "3", sharePkActivityId }), (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -1135,7 +1136,7 @@ function smtg_getTeamPkDetailInfo() {
     $.get(taskUrl('smtg_getTeamPkDetailInfo'), (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -1153,7 +1154,7 @@ function smtg_businessCirclePKDetail() {
     $.get(taskUrl('smtg_businessCirclePKDetail'), (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -1171,7 +1172,7 @@ function smtg_getBusinessCircleList() {
     $.get(taskUrl('smtg_getBusinessCircleList'), (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -1190,7 +1191,7 @@ function smtg_joinBusinessCircle(circleId) {
     $.get(taskUrl('smtg_joinBusinessCircle', { circleId }), (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -1208,7 +1209,7 @@ function smtg_businessCircleIndex() {
     $.get(taskUrl('smtg_businessCircleIndex'), (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -1226,7 +1227,7 @@ function smtg_receivedPkTeamPrize() {
     $.get(taskUrl('smtg_receivedPkTeamPrize', {"channel": "1"}), (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -1245,7 +1246,7 @@ function smtg_getPkPrize() {
     $.get(taskUrl('smtg_getPkPrize'), (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -1263,7 +1264,7 @@ function smtg_quitBusinessCircle() {
     $.get(taskUrl('smtg_quitBusinessCircle'), (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -1282,7 +1283,7 @@ function smtg_shelfList() {
     $.get(taskUrl('smtg_shelfList'), (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -1303,7 +1304,7 @@ function smtg_shelfProductList(shelfId) {
       try {
         // console.log(`检查货架[${shelfId}] 可上架产品结果:${data}`)
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -1323,7 +1324,7 @@ function smtg_upgradeProduct(productId) {
       try {
         // console.log(`升级商品productId[${productId}]结果:${data}`);
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           console.log(`升级商品结果\n${data}`);
@@ -1345,7 +1346,7 @@ function smtg_unlockProduct(productId) {
       try {
         // console.log(`解锁商品productId[${productId}]结果:${data}`);
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -1365,7 +1366,7 @@ function smtg_upgradeShelf(shelfId) {
       try {
         // console.log(`升级货架shelfId[${shelfId}]结果:${data}`);
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           console.log(`升级货架结果\n${data}`)
@@ -1387,7 +1388,7 @@ function smtg_unlockShelf(shelfId) {
       try {
         // console.log(`解锁货架shelfId[${shelfId}]结果:${data}`);
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -1406,7 +1407,7 @@ function smtg_ground(productId, shelfId) {
       try {
         // console.log(`上架商品结果:${data}`);
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -1424,7 +1425,7 @@ function smtg_productList() {
     $.get(taskUrl('smtg_productList'), (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -1442,7 +1443,7 @@ function smtg_lotteryIndex() {
     $.get(taskUrl('smtg_lotteryIndex', {"costType":1,"channel":1}), (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -1461,7 +1462,7 @@ function smtg_drawLottery() {
     $.get(taskUrl('smtg_drawLottery', {"costType":1,"channel":1}), (err, resp, data) => {
       try {
         if (err) {
-          console.log('\n京小超: API查询请求失败 ‼️‼️')
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
           console.log(JSON.stringify(err));
         } else {
           data = JSON.parse(data);
@@ -1498,7 +1499,7 @@ function shareCodesFormat() {
 }
 function requireConfig() {
   return new Promise(resolve => {
-    // console.log('\n开始获取京小超配置文件\n')
+    // console.log('\n开始获取东东超市配置文件\n')
     notify = $.isNode() ? require('./sendNotify') : '';
     //Node.js用户请在jdCookie.js处填写京东ck;
     const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -1520,8 +1521,8 @@ function requireConfig() {
       cookiesArr = cookiesArr.filter(item => item !== "" && item !== null && item !== undefined);
     }
     console.log(`共${cookiesArr.length}个京东账号\n`);
-    // console.log(`京小超已改版,目前暂不用助力, 故无助力码`)
-    // console.log(`\n京小超商圈助力码::${JSON.stringify(jdSuperMarketShareArr)}`);
+    // console.log(`东东超市已改版,目前暂不用助力, 故无助力码`)
+    // console.log(`\n东东超市商圈助力码::${JSON.stringify(jdSuperMarketShareArr)}`);
     // console.log(`您提供了${jdSuperMarketShareArr.length}个账号的助力码\n`);
     resolve()
   })
@@ -1567,26 +1568,26 @@ function TotalBean() {
   })
 }
 function getTeam() {
-    return new Promise(async resolve => {
-        $.getTeams = [];
-        $.get({url: `http://jd.turinglabs.net/api/v2/jd/supermarket/read/100000/`, timeout: 100000}, (err, resp, data) => {
-            try {
-                if (err) {
-                    console.log(`${JSON.stringify(err)}`)
-                    console.log(`${$.name} API请求失败，请检查网路重试`)
-                } else {
-                    data = JSON.parse(data);
-                    $.getTeams = data['data'];
-                }
-            } catch (e) {
-                $.logErr(e, resp)
-            } finally {
-                resolve();
-            }
-        })
-        await $.wait(10000);
-        resolve()
+  return new Promise(async resolve => {
+    $.getTeams = [];
+    $.get({url: `http://jd.turinglabs.net/api/v2/jd/supermarket/read/100000/`, timeout: 100000}, (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          data = JSON.parse(data);
+          $.getTeams = data['data'];
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve();
+      }
     })
+    await $.wait(10000);
+    resolve()
+  })
 }
 function taskUrl(function_id, body = {}) {
   return {
