@@ -381,15 +381,6 @@ jobs:
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
           PUSH_KEY: ${{ secrets.PUSH_KEY }}
 
-      - name: '运行 【京东秒秒币】'
-        run: |
-          cd ~/scripts
-          node jd_ms.js
-        env:
-          JD_COOKIE: ${{ secrets.JD_COOKIE }}
-          JD_DEBUG: ${{ secrets.JD_DEBUG }}
-          PUSH_KEY: ${{ secrets.PUSH_KEY }}
-
       - name: '运行 【京东超级盒子】'
         run: |
           cd ~/scripts
