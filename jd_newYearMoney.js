@@ -181,17 +181,17 @@ function getHomeData(info = false) {
             }
             console.log(`您的好友助力码为：${inviteId}`)
             await $.wait(2000)
-            for (let i = 1; i <= 6; ++i) {
-              let cards = data.data.result.cardInfos.filter(vo => vo.cardType === i)
-              for (let j = 0; j < cards.length; j += 2) {
-                if (j + 1 < cards.length) {
-                  let cardA = cards[j], cardB = cards[j + 1]
-                  console.log(`去合并${i}级卡片`)
-                  await consumeCard(`${cardA.cardNo},${cardB.cardNo}`)
-                  await $.wait(2000)
-                }
-              }
-            }
+            // for (let i = 1; i <= 6; ++i) {
+            //   let cards = data.data.result.cardInfos.filter(vo => vo.cardType === i)
+            //   for (let j = 0; j < cards.length; j += 2) {
+            //     if (j + 1 < cards.length) {
+            //       let cardA = cards[j], cardB = cards[j + 1]
+            //       console.log(`去合并${i}级卡片`)
+            //       await consumeCard(`${cardA.cardNo},${cardB.cardNo}`)
+            //       await $.wait(2000)
+            //     }
+            //   }
+            // }
           } else {
             $.risk = true
             console.log(`账号被风控，无法参与活动`)

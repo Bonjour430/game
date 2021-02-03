@@ -345,15 +345,6 @@ jobs:
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
           PUSH_KEY: ${{ secrets.PUSH_KEY }}
 
-      - name: '运行 【源头好物红包】'
-        run: |
-          cd ~/scripts
-          node jd_coupon.js
-        env:
-          JD_COOKIE: ${{ secrets.JD_COOKIE }}
-          JD_DEBUG: ${{ secrets.JD_DEBUG }}
-          PUSH_KEY: ${{ secrets.PUSH_KEY }}
-
       - name: '运行 【京东手机年终奖】'
         run: |
           cd ~/scripts
