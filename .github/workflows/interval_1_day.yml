@@ -6,7 +6,7 @@ name: 每天一次任务
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 16 * * *'
+    - cron: '50 15 * * *'
   watch:
     types: started
   repository_dispatch:
@@ -63,6 +63,15 @@ jobs:
           DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
           DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
           IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
+
+      - name: '运行 【环球挑战赛】'
+        run: |
+          cd ~/scripts
+          node jd_global.js
+        env:
+          JD_COOKIE: ${{ secrets.JD_COOKIE }}
+          JD_DEBUG: ${{ secrets.JD_DEBUG }}
+          PUSH_KEY: ${{ secrets.PUSH_KEY }}
 
       - name: '运行 【京豆签到脚本】'
         run: |

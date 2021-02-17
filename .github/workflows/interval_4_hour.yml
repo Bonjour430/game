@@ -112,15 +112,6 @@ jobs:
         SUPERMARKET_SHARECODES: ${{ secrets.SUPERMARKET_SHARECODES }}
         jdSuperMarketLottery: ${{ secrets.SUPERMARKET_LOTTERY }}
 
-    - name: '运行 【京东压岁钱】'
-      run: |
-        cd ~/scripts
-        node jd_newYearMoney.js
-      env:
-        JD_COOKIE: ${{ secrets.JD_COOKIE }}
-        JD_DEBUG: ${{ secrets.JD_DEBUG }}
-        PUSH_KEY: ${{ secrets.PUSH_KEY }}
-
     - name: '运行 【京东取关商品】'
       run: |
         cd ~/scripts
