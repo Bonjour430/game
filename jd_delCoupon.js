@@ -1,237 +1,203 @@
 /*
-活动入口：京东APP我的-优惠券
-脚本：删除优惠券
-更新时间：2021-01-21
-说明：1、删除优惠券名称中不含“京东”、“超市”、“生鲜”关键字的券；2、删除优惠券名称中含“XX旗舰店”的券；3、已删除的券可以在回收站中还原
+京东删除优惠券
+更新时间：2021-02-22 11:46
+脚本说明：误删除的去电脑端恢复
+脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
+// quantumultx
+[task_local]
+#京东删除优惠券
+11 0 * * 1 https://raw.githubusercontent.com/yangtingxiao/QuantumultX/master/scripts/jd/jd_deleteCoupon.js, tag=京东删除优惠券, img-url=https://raw.githubusercontent.com/yangtingxiao/QuantumultX/master/image/jd.png, enabled=true
+// Loon
+[Script]
+cron "11 0 * * 1" script-path=https://raw.githubusercontent.com/yangtingxiao/QuantumultX/master/scripts/jd/jd_deleteCoupon.js,tag=京东删除优惠券
+// Surge
+京东删除优惠券 = type=cron,cronexp=11 0 * * 1,wake-system=1,timeout=20,script-path=https://raw.githubusercontent.com/yangtingxiao/QuantumultX/master/scripts/jd/jd_deleteCoupon.js
  */
-const $ = new Env('删除优惠券');
+const $ = new Env('京东删除优惠券');
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-const notify = $.isNode() ? require('./sendNotify') : '';
-
+const printDetail = false  //是否显示出参详情
+let leaveList =  $.getdata("CFG_DELCOUPON_LEAVE")||''
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '';
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
   })
-  if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {
-  };
 } else {
-  let cookiesData = $.getdata('CookiesJD') || "[]";
-  cookiesData = jsonParse(cookiesData);
-  cookiesArr = cookiesData.map(item => item.cookie);
-  cookiesArr.reverse();
-  cookiesArr.push(...[$.getdata('CookieJD2'), $.getdata('CookieJD')]);
-  cookiesArr.reverse();
-  cookiesArr = cookiesArr.filter(item => item !== "" && item !== null && item !== undefined);
+  cookiesArr.push($.getdata('CookieJD'));
+  cookiesArr.push($.getdata('CookieJD2'));
 }
-const jdNotify = $.getdata('jdUnsubscribeNotify');//是否关闭通知，false打开通知推送，true关闭通知推送
-let goodPageSize = $.getdata('jdUnsubscribePageSize') || 20;// 运行一次取消多少个已关注的商品。数字0表示不取关任何商品
-let shopPageSize = $.getdata('jdUnsubscribeShopPageSize') || 20;// 运行一次取消多少个已关注的店铺。数字0表示不取关任何店铺
-let stopGoods = $.getdata('jdUnsubscribeStopGoods') || '';//遇到此商品不再进行取关，此处内容需去商品详情页（自营处）长按拷贝商品信息
-let stopShop = $.getdata('jdUnsubscribeStopShop') || '';//遇到此店铺不再进行取关，此处内容请尽量从头开始输入店铺名称
-let delCount = 0;
-let hasKeyword = 0; // 包含关键词的券
-const JD_API_HOST = 'https://wq.jd.com/';
 
+const JD_API_HOST = `https://wq.jd.com/activeapi/`;
 !(async () => {
   if (!cookiesArr[0]) {
-    $.msg('【京东账号一】删除优惠券失败', '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
+    $.msg($.name, '【提示】请先获取cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/', {"open-url": "https://bean.m.jd.com/"});
+    return;
   }
+  leaveList = leaveList ? leaveList.split(',') : [] ;
+  console.log('设置的保留关键字：' + leaveList.toString())
   for (let i = 0; i < cookiesArr.length; i++) {
-    if (cookiesArr[i]) {
-      cookie = cookiesArr[i];
-      $.UserName = decodeURIComponent(cookie.match(/pt_pin=(.+?);/) && cookie.match(/pt_pin=(.+?);/)[1])
-      $.index = i + 1;
-      $.isLogin = true;
-      $.nickName = '';
-      await TotalBean();
-      console.log(`\n开始【京东账号${$.index}】${$.nickName || $.UserName}\n`);
-      if (!$.isLogin) {
-        $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
-        if ($.isNode()) {
-          await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
-        }
-        continue
+    cookie = cookiesArr[i];
+    if (cookie) {
+      if (i) console.log(`\n***************开始京东账号${i + 1}***************`)
+      await initial()
+      await queryJdUserInfo();
+      if (!merge.enabled)  { //cookie不可用
+        $.setdata('', `CookieJD${i ? i + 1 : "" }`);//cookie失效，故清空cookie。
+        $.msg($.name, `【提示】京东账号${i + 1} cookie已过期！请先获取cookie\n直接使用NobyDa的京东签到获取`, 'https://bean.m.jd.com/', {"open-url": "https://bean.m.jd.com/"});
+        continue;
       }
-      await getCoupon();
-      await showMsg();
+      await queryJdCouponListWithFinance()
     }
   }
-})().catch((e) => {
-  $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
-}).finally(() => {
-  $.done();
-})
+})()
+  .catch((e) => $.logErr(e))
+  .finally(() => $.done())
 
-function delCoupon(couponId, couponTitle) {
-  return new Promise(resolve => {
-    const options = {
-      url: `https://wq.jd.com/activeapi/deletecouponlistwithfinance?couponinfolist=${couponId}&_=${Date.now()}&sceneval=2&g_login_type=1&callback=jsonpCBKC&g_ty=ls`,
-      headers: {
-        'authority': 'wq.jd.com',
-        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.2.2;14.2;%E4%BA%AC%E4%B8%9C/9.2.2 CFNetwork/1206 Darwin/20.1.0"),
-        'accept': '*/*',
-        'referer': 'https://wqs.jd.com/',
-        'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8',
-        'cookie': cookie
-      }
-    }
-    $.get(options, (err, resp, data) => {
-      try {
-        data = JSON.parse(data.match(new RegExp(/jsonpCBK.?\((.*);*/))[1]);
-        if (data.retcode === 0) {
-          console.log(`删除优惠券---${couponTitle}----成功\n`);
-          delCount++;
+
+//获取昵称（直接用，勿删）
+function queryJdUserInfo(timeout = 0) {
+  return new Promise((resolve) => {
+    setTimeout( ()=>{
+      let url = {
+        url : `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,
+        headers : {
+          'Referer' : `https://wqs.jd.com/my/iserinfo.html`,
+          'Cookie' : cookie
         }
-      } catch (e) {
-        $.logErr(e, resp);
-      } finally {
-        resolve();
       }
-    })
+      $.get(url, (err, resp, data) => {
+        try {
+          if (printDetail) console.log(data)
+          data = JSON.parse(data);
+          if (data.retcode === 13) {
+            merge.enabled = false
+            return
+          }
+          merge.nickname = data.base.nickname;
+        } catch (e) {
+          $.logErr(e, resp);
+        } finally {
+          resolve()
+        }
+      })
+    },timeout)
   })
 }
 
-function getCoupon() {
-  return new Promise(resolve => {
-    let states = ['1', '6']
-    for (let s = 0; s < states.length; s++) {
-      let options = {
-        url: `https://wq.jd.com/activeapi/queryjdcouponlistwithfinance?state=${states[s]}&wxadd=1&filterswitch=1&_=${Date.now()}&sceneval=2&g_login_type=1&callback=jsonpCBKB&g_ty=ls`,
-        headers: {
-          'authority': 'wq.jd.com',
-          "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.2.2;14.2;%E4%BA%AC%E4%B8%9C/9.2.2 CFNetwork/1206 Darwin/20.1.0"),
-          'accept': '*/*',
-          'referer': 'https://wqs.jd.com/',
-          'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8',
-          'cookie': cookie
+//查询优惠券
+function queryJdCouponListWithFinance(timeout = 0){
+  return new Promise((resolve) => {
+    setTimeout( ()=>{
+      let url = {
+        url : `${JD_API_HOST}queryjdcouponlistwithfinance?state=1&wxadd=1&filterswitch=1&_=${Date.now()}&sceneval=2&g_login_type=1&callback=dealCouponList`,
+        headers : {
+          'Cookie' : cookie,
+          'Connection' : `keep-alive`,
+          'Accept' : `*/*`,
+          'Referer' : `https://wqs.jd.com/my/coupon/index.shtml`,
+          'Host' : `wq.jd.com`,
+          'Accept-Encoding' : `gzip, deflate, br`,
+          'Accept-Language' : `zh-cn`
         }
       }
-      $.get(options, async (err, resp, data) => {
+      $.get(url, async (err, resp, data) => {
         try {
-          data = JSON.parse(data.match(new RegExp(/jsonpCBK.?\((.*);*/))[1]);
-          let couponTitle = ''
-          let couponId = ''
-          if (states[s] === '6') {
-            // 删除已过期
-            let expire = data['coupon']['expired']
-            for (let i = 0; i < expire.length; i++) {
-              couponTitle = expire[i].couponTitle
-              couponId = escape(`${expire[i].couponid},1,0`);
-              await delCoupon(couponId, couponTitle)
-            }
-            // 删除已使用
-            let used = data['coupon']['used']
-            for (let i = 0; i < used.length; i++) {
-              couponTitle = used[i].couponTitle
-              couponId = escape(`${used[i].couponid},0,0`);
-              await delCoupon(couponId, couponTitle)
-            }
-          } else if (states[s] === '1') {
-            // 删除可使用且非超市、生鲜、京贴
-            let useable = data.coupon.useable
-            for (let i = 0; i < useable.length; i++) {
-              couponTitle = useable[i].limitStr
-              couponId = escape(`${useable[i].couponid},1,0`);
-              if (!isJDCoupon(couponTitle)) {
-                await delCoupon(couponId, couponTitle)
-              } else {
-                $.log(`跳过删除:${couponTitle}`)
-                hasKeyword++;
+          await eval(data)
+        } catch (e) {
+          $.logErr(e, resp);
+        } finally {
+          resolve()
+        }
+      })
+    },timeout)
+  })
+}
+
+function dealCouponList(data,timeout = 0){
+  return new  Promise((resolve) => {
+    setTimeout(async () => {
+      try {
+        if (printDetail) console.log(JSON.stringify(data))
+        for (let i in data.coupon.useable) {
+          if (data.coupon.useable[i].coupontype === 2) continue       //运费券
+          if (data.coupon.useable[i].coupontype === 1) continue       //支付券
+          if (data.coupon.useable[i].limitStr.match(/京贴|全品类/)) continue  //京贴、全品类 暂不处理
+          if (data.coupon.useable[i].discountInfo.info.length) {
+            console.log(data.coupon.useable[i].limitStr + "  满" + parseFloat(data.coupon.useable[i].discountInfo.info[0].quota).toFixed(0) + "打" + parseFloat(data.coupon.useable[i].discountInfo.info[0].discountRate) * 10 + "折")
+          } else {
+            console.log(data.coupon.useable[i].limitStr + "  " + parseFloat(data.coupon.useable[i].quota).toFixed(0) + '-' + parseFloat(data.coupon.useable[i].discount).toFixed(0))
+          }
+          let couponInfoList = encodeURIComponent(data.coupon.useable[i].couponid + ',' +data.coupon.useable[i].coupontype + ',' + data.coupon.useable[i].couponStyle)
+          let doNext = false
+          if (!leaveList.length) {
+            await deleteCouponListWithFinance(couponInfoList)
+          } else {
+            for (let j in leaveList) {
+              if (data.coupon.useable[i].limitStr.match(new RegExp(leaveList[j]))) {
+                doNext = true
+                break
               }
             }
+            if (doNext) {
+              continue
+            } else {
+              await deleteCouponListWithFinance(couponInfoList)
+            }
+          }
+        }
+      } catch (e) {
+        $.logErr(e);
+      } finally {
+        resolve()
+      }
+    }, timeout)
+  })
+}
+
+//删除优惠券
+function deleteCouponListWithFinance(couponInfoList,timeout = 0){
+  return new Promise((resolve) => {
+    setTimeout( ()=>{
+      let url = {
+        url : `${JD_API_HOST}deletecouponlistwithfinance?couponinfolist=${couponInfoList}&_=${Date.now()}&sceneval=2&g_login_type=1&callback=jsonpCBKE&g_ty=ls`,
+        headers : {
+          'Cookie' : cookie,
+          'Connection' : `keep-alive`,
+          'Accept' : `*/*`,
+          'Referer' : `https://wqs.jd.com/my/coupon/index.shtml`,
+          'Host' : `wq.jd.com`,
+          'Accept-Encoding' : `gzip, deflate, br`,
+          'Accept-Language' : `zh-cn`
+        }
+      }
+      $.get(url, async (err, resp, data) => {
+        try {
+          data = data.match(/(jsonpCBKE\()(.+)/)[2]
+          if (printDetail) console.log(data)
+          data = JSON.parse(data)
+          if (data.retcode) {
+            console.log('删除失败：' + data.retmsg)
+          } else {
+            console.log('删除成功')
           }
         } catch (e) {
           $.logErr(e, resp);
         } finally {
-          resolve();
+          resolve()
         }
       })
-    }
+    },timeout)
   })
 }
 
-function isJDCoupon(title) {
-  if (title.indexOf('京东') > -1)
-    return true
-  else if (title.indexOf('超市') > -1)
-    return true
-  else if (title.indexOf('京贴') > -1)
-    return true
-  else if (title.indexOf('全品类') > -1)
-    return true
-  else if (title.indexOf('话费') > -1)
-    return true
-  else if (title.indexOf('小鸽有礼') > -1)
-    return true
-  else if (title.indexOf('旗舰店') > -1)
-    return false
-  else if (title.indexOf('生鲜') > -1)
-    return true
-  else
-    return false
-}
 
-function showMsg() {
-  if (!jdNotify || jdNotify === 'false') {
-    $.msg($.name, ``, `【京东账号${$.index}】${$.nickName}\n【已删除优惠券】${delCount}张\n【跳过含关键词】${hasKeyword}张`);
-  } else {
-    $.log(`\n【京东账号${$.index}】${$.nickName}\n【已删除优惠券】${delCount}张\n【跳过含关键词】${hasKeyword}张`);
-  }
-}
-
-function TotalBean() {
-  return new Promise(async resolve => {
-    const options = {
-      "url": `https://wq.jd.com/user/info/QueryJDUserInfo?sceneval=2`,
-      "headers": {
-        "Accept": "application/json,text/plain, */*",
-        "Content-Type": "application/x-www-form-urlencoded",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Accept-Language": "zh-cn",
-        "Connection": "keep-alive",
-        "Cookie": cookie,
-        "Referer": "https://wqs.jd.com/my/jingdou/my.shtml?sceneval=2",
-        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.2.2;14.2;%E4%BA%AC%E4%B8%9C/9.2.2 CFNetwork/1206 Darwin/20.1.0")
-      }
-    }
-    $.post(options, (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
-        } else {
-          if (data) {
-            data = JSON.parse(data);
-            if (data['retcode'] === 13) {
-              $.isLogin = false; //cookie过期
-              return
-            }
-            $.nickName = data['base'].nickname;
-          } else {
-            console.log(`京东服务器返回空数据`)
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve();
-      }
-    })
-  })
-}
-
-function jsonParse(str) {
-  if (typeof str == "string") {
-    try {
-      return JSON.parse(str);
-    } catch (e) {
-      console.log(e);
-      $.msg($.name, '', '请勿随意在BoxJs输入框修改内容\n建议通过脚本去获取cookie')
-      return [];
-    }
+//初始化
+function initial() {
+  merge = {
+    nickname: "",
+    enabled: true
   }
 }
 // prettier-ignore

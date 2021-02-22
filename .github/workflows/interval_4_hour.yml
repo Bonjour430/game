@@ -75,7 +75,7 @@ jobs:
     - name: '运行 【京喜财富岛】'
       run: |
         cd ~/scripts
-        node jd_jxcfd.js
+        node jx_cfd.js
       env:
         JD_COOKIE: ${{ secrets.JD_COOKIE }}
         JD_DEBUG: ${{ secrets.JD_DEBUG }}
@@ -102,7 +102,7 @@ jobs:
     - name: '运行 【东东超市】'
       run: |
         cd ~/scripts
-        node jd_superMarket.js
+        node jdSuperMarketShareCodes.js
       env:
         JD_COOKIE: ${{ secrets.JD_COOKIE }}
         JD_DEBUG: ${{ secrets.JD_DEBUG }}
@@ -111,6 +111,22 @@ jobs:
         jdBusinessCircleJump: ${{ secrets.BUSINESS_CIRCLE_JUMP }}
         SUPERMARKET_SHARECODES: ${{ secrets.SUPERMARKET_SHARECODES }}
         jdSuperMarketLottery: ${{ secrets.SUPERMARKET_LOTTERY }}
+
+#    - name: "运行【京东极速版领现金】"
+#        run: |
+#          node jd_speed_redpocke.js
+#        env:
+#          JD_COOKIE: ${{ github.event.client_payload.JD_COOKIE || secrets.JD_COOKIE }}
+#          JD_DEBUG: ${{ github.event.client_payload.JD_DEBUG || secrets.JD_DEBUG }}
+#          PUSH_KEY: ${{ github.event.client_payload.PUSH_KEY || secrets.PUSH_KEY }}
+#
+#    - name: "运行【京东极速版签到+赚现金任务】"
+#        run: |
+#          node jd_speed_sign.js
+#        env:
+#          JD_COOKIE: ${{ github.event.client_payload.JD_COOKIE || secrets.JD_COOKIE }}
+#          JD_DEBUG: ${{ github.event.client_payload.JD_DEBUG || secrets.JD_DEBUG }}
+#          PUSH_KEY: ${{ github.event.client_payload.PUSH_KEY || secrets.PUSH_KEY }}
 
     - name: '运行 【京东取关商品】'
       run: |
