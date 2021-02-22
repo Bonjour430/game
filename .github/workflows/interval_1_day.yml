@@ -341,7 +341,7 @@ jobs:
       - name: '运行 【京东价格保护】'
         run: |
           cd ~/scripts
-          node jd_priceProtext.js
+          node jd_priceProtect.js
         env:
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
