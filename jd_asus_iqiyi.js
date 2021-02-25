@@ -3,8 +3,6 @@
 活动地址:https://asusiqiyi.jd.com
 没有添加助力环节，仅完成可能获得京豆的任务；
 by i-chenzhe
-1 0 22-28 2 * https://raw.githubusercontent.com/i-chenzhe/qx/main/jd_asus_iqiyi.js
-
 */
 const $ = new Env('华硕-爱奇艺');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -253,7 +251,11 @@ function TotalBean() {
               $.isLogin = false; //cookie过期
               return
             }
-            $.nickName = data['base'].nickname;
+            if (data['retcode'] === 0) {
+              $.nickName = data['base'].nickname;
+            } else {
+              $.nickName = $.UserName
+            }
           } else {
             console.log(`京东服务器返回空数据`)
           }
