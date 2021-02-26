@@ -40,13 +40,6 @@ jobs:
                   JD_COOKIE: ${{ github.event.client_payload.JD_COOKIE || secrets.JD_COOKIE }}
                   PUSH_KEY: ${{ github.event.client_payload.PUSH_KEY || secrets.PUSH_KEY }}
 
-            - name: "运行【百变大咖秀】"
-              run: |
-                  node jd_entertainment.js
-              env:
-                  JD_COOKIE: ${{ github.event.client_payload.JD_COOKIE || secrets.JD_COOKIE }}
-                  PUSH_KEY: ${{ github.event.client_payload.PUSH_KEY || secrets.PUSH_KEY }}
-
 #             - name: "运行【京东粉丝互动】"
 #               run: |
 #                   node jd_fanslove.js
