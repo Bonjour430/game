@@ -5,8 +5,8 @@
 by i-chenzhe
 */
 const $ = new Env('华硕-爱奇艺');
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-const notify = $.isNode() ? require('./sendNotify') : '';
+const jdCookieNode = $.isNode() ? require('../jdCookie.js') : '';
+const notify = $.isNode() ? require('../sendNotify') : '';
 let cookiesArr = [], cookie = '', originCookie = '', message = '';
 let helpAuthor = true;//为作者助力的开关
 const API_HOST = 'https://asusiqiyi.m.jd.com/hsiqy/task/';

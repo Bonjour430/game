@@ -26,9 +26,9 @@ jobs:
             - name: 安装依赖包
               run: |
                   npm install
-            - name: "运行【华硕-爱奇艺】"
+            - name: "运行【她的节享京豆】"
               run: |
-                  node jd_asus_iqiyi.js
+                  node jd_firecrackers.js
               env:
                   JD_COOKIE: ${{ github.event.client_payload.JD_COOKIE || secrets.JD_COOKIE }}
                   PUSH_KEY: ${{ github.event.client_payload.PUSH_KEY || secrets.PUSH_KEY }}
