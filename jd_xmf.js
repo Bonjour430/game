@@ -2,6 +2,7 @@
  京东小魔方 活动入口：京东app-新品首发-百万京豆
  活动好像是持续进行的，cron还是修改成每天运行就好了。
 脚本更新地址：https://raw.githubusercontent.com/i-chenzhe/qx/master/jd_xmf.js
+
  已支持IOS双京东账号,Node.js支持N个京东账号
  脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
  // quantumultx
@@ -20,7 +21,7 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '';
-let helpAuthor = true;//为作者助力的开关
+let helpAuthor = false;//为作者助力的开关
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])

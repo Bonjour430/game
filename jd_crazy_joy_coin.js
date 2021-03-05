@@ -208,8 +208,7 @@ async function jdCrazyJoy() {
   await $.wait(1000)
 
   // 如果格子全部被占有且没有可以合并的JOY，只能回收低级的JOY (且最低等级的JOY小于30级)
-  // if(checkHasFullOccupied() && !checkCanMerge() && finMinJoyLevel() < 30) {
-  if(checkHasFullOccupied() && !checkCanMerge() && !checkHas34Level()) {
+  if(checkHasFullOccupied() && !checkCanMerge() && finMinJoyLevel() < 30) {
     const minJoyId = Math.min(...$.joyIds);
     const boxId = $.joyIds.indexOf(minJoyId);
     console.log(`格子全部被占有且没有可以合并的JOY，回收${boxId + 1}号位等级为${minJoyId}的JOY`)
@@ -498,7 +497,7 @@ function buyJoy(joyId) {
               $.canBuy = false
               return
             }
-            $.log(`购买${joyId}级joy成功，剩余金币【${data.data.totalCoins / 1000000000} GB】`)
+            $.log(`购买${joyId}级joy成功，剩余金币【${data.data.totalCoins}】`)
             $.coin = data.data.totalCoins
           } else {
             console.log(data.message)
@@ -531,7 +530,7 @@ function sellJoy(joyId, boxId) {
               $.canBuy = false
               return
             }
-            $.log(`回收${joyId}级joy成功，剩余金币【${data.data.totalCoins / 1000000000} GB】`)
+            $.log(`回收${joyId}级joy成功，剩余金币【${data.data.totalCoins}】`)
             $.coin = data.data.totalCoins
           } else {
             console.log(data.message)
@@ -558,7 +557,7 @@ function hourBenefit() {
           if (safeGet(data)) {
             data = JSON.parse(data);
             if (data.success)
-              console.log(`金币补给领取成功，获得${data.data.coins / 1000000000} GB金币`)
+              console.log(`金币补给领取成功，获得${data.data.coins}金币`)
           }
         }
       } catch (e) {
@@ -610,7 +609,7 @@ function getCoin() {
             }
             if (data.data && data.data.totalCoinAmount) {
               $.coin = data.data.totalCoinAmount;
-              $.log(`当前金币:${$.coin / 1000000000000} TB\n`)
+              $.log(`当前金币:${$.coin}\n`)
             } else {
               $.coin = `获取当前金币数量失败`
             }
@@ -619,7 +618,7 @@ function getCoin() {
               await $.wait(1000)
             }
             if (data.data) {
-              $.log(`此次在线收益：获得 ${data.data['coins'] / 1000000000 } GB 金币`)
+              $.log(`此次在线收益：获得 ${data.data['coins']} 金币`)
             }
           }
         }
@@ -702,7 +701,7 @@ function rewardBox(eventType, boxId) {
           if (safeGet(data)) {
             data = JSON.parse(data);
             if (data['success']) {
-              $.log(`幸运盒子奖励领取成功，获得：${data.data.beans}京豆，${data.data.coins / 1000000000} GB金币`)
+              $.log(`幸运盒子奖励领取成功，获得：${data.data.beans}京豆，${data.data.coins}金币`)
             } else {
               $.log(`幸运盒子奖励领取失败，错误信息：${data.message || JSON.stringify(data)}`)
             }
