@@ -102,7 +102,7 @@ jobs:
     - name: '运行 【东东超市】'
       run: |
         cd ~/scripts
-        node jdSuperMarketShareCodes.js
+        node jd_superMarket.js
       env:
         JD_COOKIE: ${{ secrets.JD_COOKIE }}
         JD_DEBUG: ${{ secrets.JD_DEBUG }}
