@@ -26,8 +26,8 @@ cron "10 10,11 * * 2-5" script-path=https://raw.githubusercontent.com/i-chenzhe/
 */
 
 const $ = new Env('百变大咖秀');
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-const notify = $.isNode() ? require('./sendNotify') : '';
+const jdCookieNode = $.isNode() ? require('../jdCookie.js') : '';
+const notify = $.isNode() ? require('../sendNotify') : '';
 let cookiesArr = [], cookie = '', originCookie = '', message = '';
 let helpAuthor = false;//为作者助力的开关
 const ACT_ID = 'dz2102100001340205';
