@@ -6,7 +6,7 @@ name: 每天一次任务
 on:
   workflow_dispatch:
   schedule:
-    - cron: '59 15 * * *'
+    - cron: '56 15 * * *'
   watch:
     types: started
   repository_dispatch:
