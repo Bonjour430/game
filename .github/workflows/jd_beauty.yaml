@@ -6,7 +6,7 @@ name: 京东美丽研究院
 on:
     workflow_dispatch:
     schedule:
-        - cron: "1 4,10,17 * * *"
+        - cron: "1 7,12,19 * * *"
     watch:
         types: [started]
     repository_dispatch:
@@ -46,13 +46,13 @@ jobs:
               env:
                 JD_COOKIE: ${{ github.event.client_payload.JD_COOKIE || secrets.JD_COOKIE }}
                 PUSH_KEY: ${{ github.event.client_payload.PUSH_KEY || secrets.PUSH_KEY }}
-#
-#            - name: "运行【京东美丽研究院】"
-#              run: |
-#                node jd_beauty.js
-#              env:
-#                JD_COOKIE: ${{ github.event.client_payload.JD_COOKIE || secrets.JD_COOKIE }}
-#                PUSH_KEY: ${{ github.event.client_payload.PUSH_KEY || secrets.PUSH_KEY }}
+
+            - name: "运行【京东美丽研究院】"
+              run: |
+                node jd_beauty.js
+              env:
+                JD_COOKIE: ${{ github.event.client_payload.JD_COOKIE || secrets.JD_COOKIE }}
+                PUSH_KEY: ${{ github.event.client_payload.PUSH_KEY || secrets.PUSH_KEY }}
 
 #             - name: "运行【京东粉丝互动】"
 #               run: |
