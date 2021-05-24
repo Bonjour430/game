@@ -324,12 +324,12 @@ async function mr() {
             //console.log(`【${vo?vo.data?vo.data.position}】上正在生产【${vo?vo.data?vo.data.material_name}】，可收取 ${vo.data.produce_num} 份`)
             if (new Date().getTime() > vo.data.procedure.end_at) {
               //console.log(`去收取${vo?.data?.material_name}`)
-              client.send(`{"msg":{"type":"action","args":{"position":"${vo?vo.data?vo.data.position:''}","replace_material":false},"action":"material_fetch_v2"}}`)
+              client.send(`{"msg":{"type":"action","args":{"position":"${(vo && vo.data && vo.data.position)}","replace_material":false},"action":"material_fetch_v2"}}`)
               client.send(`{"msg":{"type":"action","args":{},"action":"to_employee"}}`)
-              $.pos.push(vo?vo.data?vo.data.position)
+              $.pos.push((vo && vo.data && vo.data.position) || '')
             }
           } else {
-            if (vo?vo.data && vo.data.valid_electric > 0) {
+            if ((vo && vo.data && vo.data.valid_electric) > 0) {
               //console.log(`【${vo.data.position}】上尚未开始生产`)
               let ma
               //console.log(`$.needs:${JSON.stringify($.needs)}`);
@@ -360,7 +360,7 @@ async function mr() {
         case "material_produce_v2":
           //console.log(`【${vo.data.position}】上开始生产${vo?.data?.material_name}`)
           client.send(`{"msg":{"type":"action","args":{},"action":"to_employee"}}`)
-          $.pos.push(vo.data.position)
+          $.pos.push((vo && vo.data && vo.data.position) || '')
           break
         case "material_fetch_v2":
           if (vo.code === '200' || vo.code === 200) {
